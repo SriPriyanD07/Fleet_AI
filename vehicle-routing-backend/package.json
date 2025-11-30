@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "import:drivers": "node scripts/importDriversFromXlsx.js ../data/drivers.xlsx",
+    "import:drivers": "node scripts/importDriversFromXlsx.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

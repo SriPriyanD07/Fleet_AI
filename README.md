@@ -46,7 +46,7 @@ npm start
 
 ## Backend: MongoDB drivers collection
 
-This project now stores drivers in a MongoDB collection (Mongoose). The old Excel files were removed from the repository and replaced with `data/drivers-sample.csv` (header + dummy row). Use the import script to populate your database from Excel files locally.
+This project now stores drivers in a MongoDB collection (Mongoose). The repository no longer includes any CSV or Excel data files — import your production or local driver data using the import script from a local path (do not commit data files into source control).
 
 1. Create a `.env` file based on `.env.example` and set `MONGODB_URI` and `JWT_SECRET`.
 
@@ -60,7 +60,8 @@ npm run dev
 3. Import drivers from an Excel file (example):
 ```powershell
 cd vehicle-routing-backend
-node scripts/importDriversFromXlsx.js ../data/drivers.xlsx
+# Provide the path to your local Excel file (this file should NOT be committed to the repo)
+node scripts/importDriversFromXlsx.js "C:\path\to\your\drivers.xlsx"
 ```
 
 API endpoints (JSON):
