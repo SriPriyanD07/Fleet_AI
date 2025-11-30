@@ -1,12 +1,26 @@
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const rateLimit = require('express-rate-limit');
+require('dotenv').config();
 
 const app = express();
-const PORT = 3002;
+const PORT = process.env.PORT || 3002;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(rateLimit({ windowMs: 1000 * 60, max: 100 }));
+
+// Connect to MongoDB (if configured)
+const MONGODB_URI = process.env.MONGODB_URI;
+if (MONGODB_URI) {
+  mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('MongoDB connection error', err));
+} else {
+  console.log('MONGODB_URI not set — drivers endpoints will fail until configured');
+}
 
 // In-memory data store
 let vehicles = [
@@ -61,6 +75,14 @@ setInterval(() => {
 app.get('/api/vehicles', (req, res) => {
   res.json(vehicles);
 });
+
+// Mount drivers routes (if present)
+try {
+  const driversRouter = require('./routes/drivers');
+  app.use('/api/drivers', driversRouter);
+} catch (err) {
+  console.log('Drivers routes not available:', err.message);
+}
 
 app.get('/api/vehicles/:id', (req, res) => {
   const vehicle = vehicles.find(v => v.id === parseInt(req.params.id));
